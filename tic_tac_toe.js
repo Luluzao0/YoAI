@@ -1,5 +1,4 @@
 // Jogo da Velha (Tic-Tac-Toe) com Árvore de Busca
-// Autor: [Seu Nome]
 // Versão inicial: IA x IA e IA x Humano no terminal
 
 // Representação do tabuleiro: array de 9 posições
