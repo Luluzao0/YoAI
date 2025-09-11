@@ -282,6 +282,7 @@
         <div class="controls">
             <button onclick="reiniciarJogo()">🔄 Novo Jogo</button>
             <button onclick="zerarPlacar()">📊 Zerar Placar</button>
+            <button onclick="jogarIAvsIA()">🤖 IA vs IA</button>
             <a href="painel.html" style="text-decoration: none;">
                 <button>📈 Ver Histórico</button>
             </a>
@@ -289,27 +290,20 @@
     </div>
 
     <script>
-        // Estado do jogo usando a biblioteca JogoDaVelhaIA
+        // Estado do jogo
         let tabuleiro = JogoDaVelhaIA.novoJogo();
         let jogadorAtual = 'X'; // X = humano, O = IA
         let jogoAtivo = true;
-        let pontuacao = {
-            jogador: 0,
-            ia: 0,
-            empates: 0
-        };
-
+        let pontuacao = { jogador: 0, ia: 0, empates: 0 };
         // Carrega pontuação do localStorage
         if (localStorage.getItem('jogoDaVelhaPontuacao')) {
             pontuacao = JSON.parse(localStorage.getItem('jogoDaVelhaPontuacao'));
-            atualizarPlacar();
         }
 
         // Cria o tabuleiro visual
         function criarTabuleiro() {
             const board = document.getElementById('gameBoard');
             board.innerHTML = '';
-            
             for (let i = 0; i < 9; i++) {
                 const cell = document.createElement('button');
                 cell.className = 'cell';
@@ -323,8 +317,7 @@
         function atualizarTabuleiro() {
             for (let i = 0; i < 9; i++) {
                 const cell = document.getElementById(`cell-${i}`);
-                const valor = tabuleiro[i];
-                
+                const valor = Array.isArray(tabuleiro) ? tabuleiro[i] : null;
                 if (valor) {
                     cell.textContent = valor;
                     cell.className = `cell ${valor.toLowerCase()}`;
@@ -332,7 +325,6 @@
                 } else {
                     cell.textContent = '';
                     cell.className = 'cell';
-                    // Só desabilita se o jogo não estiver ativo
                     cell.disabled = !jogoAtivo;
                 }
             }
@@ -347,67 +339,48 @@
 
         // Faz uma jogada
         async function fazerJogada(posicao) {
-            // Verifica se é a vez do jogador humano e se a posição é válida
-            if (!jogoAtivo || tabuleiro[posicao] !== null || jogadorAtual !== 'X') {
+            if (!jogoAtivo || !Array.isArray(tabuleiro) || tabuleiro[posicao] !== null || jogadorAtual !== 'X') {
                 return;
             }
-            
-            // Jogada do humano usando a biblioteca
             tabuleiro = JogoDaVelhaIA.fazerJogada(tabuleiro, posicao, 'X');
-            if (!tabuleiro) return; // Jogada inválida
-            
-            jogadorAtual = 'O'; // Muda para a IA
+            if (!Array.isArray(tabuleiro)) return;
+            jogadorAtual = 'O';
             atualizarTabuleiro();
-            
-            // Verifica se o jogo terminou após a jogada do humano
             if (JogoDaVelhaIA.acabou(tabuleiro)) {
-                finalizarJogo();
+                await finalizarJogo();
                 return;
             }
-            
-            // Vez da IA - mostra status e desabilita temporariamente o tabuleiro
             atualizarStatus('🤖 IA está pensando...', 'thinking');
-            
-            // Desabilita temporariamente todas as células vazias durante o "pensamento"
             for (let i = 0; i < 9; i++) {
                 const cell = document.getElementById(`cell-${i}`);
-                if (tabuleiro[i] === null) {
-                    cell.disabled = true;
-                }
+                if (tabuleiro[i] === null) cell.disabled = true;
             }
-            
-            // Simula tempo de "pensamento" da IA
-            setTimeout(() => {
-                if (!jogoAtivo) return; // Verifica se o jogo ainda está ativo
-                
-                // IA faz sua jogada usando a biblioteca
+            setTimeout(async () => {
+                if (!jogoAtivo) return;
                 const jogadaIA = JogoDaVelhaIA.jogadaIA(tabuleiro, 'O');
+                if (!jogadaIA || typeof jogadaIA.posicao !== 'number') return;
                 tabuleiro = JogoDaVelhaIA.fazerJogada(tabuleiro, jogadaIA.posicao, 'O');
-                
-                jogadorAtual = 'X'; // Volta para o jogador humano
+                jogadorAtual = 'X';
                 atualizarTabuleiro();
-                
                 if (JogoDaVelhaIA.acabou(tabuleiro)) {
-                    finalizarJogo();
+                    await finalizarJogo();
                 } else {
                     atualizarStatus('Sua vez! Clique em uma casa vazia.', 'player-turn');
                 }
-            }, 1000);
+            }, 700);
         }
 
-        // Finaliza o jogo
-        function finalizarJogo() {
+        // Finaliza o jogo e salva no backend
+        async function finalizarJogo(tipoPartida = 'IAxHumano', acoes = null) {
             jogoAtivo = false;
             const resultado = JogoDaVelhaIA.resultadoFinal(tabuleiro);
-            
             let mensagem, classe = 'game-over';
-            
             if (resultado === 'X') {
-                mensagem = '🎉 Parabéns! Você venceu!';
+                mensagem = tipoPartida === 'IAxIA' ? '🤖 IA (X) venceu!' : '🎉 Parabéns! Você venceu!';
                 pontuacao.jogador++;
                 document.querySelector('.score-board .score-item:first-child').classList.add('winner');
             } else if (resultado === 'O') {
-                mensagem = '🤖 A IA venceu! Tente novamente.';
+                mensagem = tipoPartida === 'IAxIA' ? '🤖 IA (O) venceu!' : '🤖 A IA venceu! Tente novamente.';
                 pontuacao.ia++;
                 document.querySelector('.score-board .score-item:last-child').classList.add('winner');
             } else {
@@ -415,17 +388,31 @@
                 pontuacao.empates++;
                 document.querySelector('.score-board .score-item:nth-child(2)').classList.add('winner');
             }
-            
             atualizarStatus(mensagem, classe);
             atualizarPlacar();
             salvarPontuacao();
-            
-            // Remove destaque após alguns segundos
+            // Salva histórico no backend
+            const dadosPartida = {
+                tipo: tipoPartida,
+                tabuleiroFinal: Array.isArray(tabuleiro) ? tabuleiro : [],
+                resultado: resultado,
+                data: new Date().toISOString(),
+                acoes: acoes
+            };
+            try {
+                await fetch('/salvar-partida', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dadosPartida)
+                });
+            } catch (e) {
+                console.error('Erro ao salvar partida no histórico:', e);
+            }
             setTimeout(() => {
                 document.querySelectorAll('.score-item').forEach(item => {
                     item.classList.remove('winner');
                 });
-            }, 3000);
+            }, 2000);
         }
 
         // Atualiza o placar visual
@@ -464,6 +451,81 @@
         }
 
         // Inicializa o jogo
+        // Função para simular IA vs IA (com animação de jogadas)
+        async function jogarIAvsIA() {
+            reiniciarJogo();
+            jogoAtivo = false;
+            let simulacao = JogoDaVelhaIA.simularPartidaIAvsIA();
+            if (!simulacao || !Array.isArray(simulacao.acoes)) return;
+            tabuleiro = JogoDaVelhaIA.novoJogo();
+            atualizarTabuleiro();
+            let i = 0;
+            function animarJogadas() {
+                if (i >= simulacao.acoes.length) {
+                    // Ao final, garantir que tabuleiroFinal e resultado estejam corretos
+                    tabuleiro = simulacao.tabuleiroFinal;
+                    atualizarTabuleiro();
+                    // Chamar finalizarJogo e passar o tabuleiro final e resultado corretos
+                    finalizarJogoIAxIA(simulacao);
+                    return;
+                }
+                const acao = simulacao.acoes[i];
+                atualizarStatus(`IA (${acao.jogador}) está pensando...`, 'thinking');
+                setTimeout(() => {
+                    tabuleiro = JogoDaVelhaIA.fazerJogada([...tabuleiro], acao.posicao, acao.jogador);
+                    atualizarTabuleiro();
+                    atualizarStatus(`IA (${acao.jogador}) jogou na posição ${acao.posicao + 1}`, 'thinking');
+                    i++;
+                    animarJogadas();
+                }, 10000);
+            }
+            animarJogadas();
+        }
+
+        // Função específica para finalizar e salvar IA x IA corretamente
+        async function finalizarJogoIAxIA(simulacao) {
+            jogoAtivo = false;
+            let mensagem, classe = 'game-over';
+            if (simulacao.resultado === 'X') {
+                mensagem = '🤖 IA (X) venceu!';
+                pontuacao.jogador++;
+                document.querySelector('.score-board .score-item:first-child').classList.add('winner');
+            } else if (simulacao.resultado === 'O') {
+                mensagem = '🤖 IA (O) venceu!';
+                pontuacao.ia++;
+                document.querySelector('.score-board .score-item:last-child').classList.add('winner');
+            } else {
+                mensagem = '🤝 Empate! Boa partida!';
+                pontuacao.empates++;
+                document.querySelector('.score-board .score-item:nth-child(2)').classList.add('winner');
+            }
+            atualizarStatus(mensagem, classe);
+            atualizarPlacar();
+            salvarPontuacao();
+            // Salva histórico no backend com tabuleiroFinal e resultado corretos
+            const dadosPartida = {
+                tipo: 'IAxIA',
+                tabuleiroFinal: Array.isArray(simulacao.tabuleiroFinal) ? simulacao.tabuleiroFinal : [],
+                resultado: simulacao.resultado,
+                data: new Date().toISOString(),
+                acoes: simulacao.acoes
+            };
+            try {
+                await fetch('/salvar-partida', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dadosPartida)
+                });
+            } catch (e) {
+                console.error('Erro ao salvar partida no histórico:', e);
+            }
+            setTimeout(() => {
+                document.querySelectorAll('.score-item').forEach(item => {
+                    item.classList.remove('winner');
+                });
+            }, 2000);
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             criarTabuleiro();
             atualizarTabuleiro();

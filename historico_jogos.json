@@ -1,1 +1,235 @@
-[]
+[
+  {
+    "tipo": "IAxHumano",
+    "tabuleiroFinal": [
+      "X",
+      null,
+      null,
+      "O",
+      "O",
+      "O",
+      "X",
+      null,
+      "X"
+    ],
+    "resultado": "O",
+    "data": "2025-09-11T18:20:14.636Z",
+    "acoes": null
+  },
+  {
+    "tipo": "IAxIA",
+    "tabuleiroFinal": [],
+    "resultado": null,
+    "data": "2025-09-11T18:22:49.420Z",
+    "acoes": [
+      {
+        "jogador": "X",
+        "posicao": 0
+      }
+    ]
+  },
+  {
+    "tipo": "IAxIA",
+    "tabuleiroFinal": [],
+    "resultado": null,
+    "data": "2025-09-11T18:22:52.564Z",
+    "acoes": [
+      {
+        "jogador": "X",
+        "posicao": 0
+      }
+    ]
+  },
+  {
+    "tipo": "IAxIA",
+    "tabuleiroFinal": [],
+    "resultado": null,
+    "data": "2025-09-11T18:22:53.687Z",
+    "acoes": [
+      {
+        "jogador": "X",
+        "posicao": 0
+      }
+    ]
+  },
+  {
+    "tipo": "IAxIA",
+    "tabuleiroFinal": [],
+    "resultado": null,
+    "data": "2025-09-11T18:22:54.661Z",
+    "acoes": [
+      {
+        "jogador": "X",
+        "posicao": 0
+      }
+    ]
+  },
+  {
+    "tipo": "IAxIA",
+    "tabuleiroFinal": [],
+    "resultado": null,
+    "data": "2025-09-11T18:22:55.620Z",
+    "acoes": [
+      {
+        "jogador": "X",
+        "posicao": 0
+      }
+    ]
+  },
+  {
+    "tipo": "IAxIA",
+    "tabuleiroFinal": [],
+    "resultado": null,
+    "data": "2025-09-11T18:22:56.450Z",
+    "acoes": [
+      {
+        "jogador": "X",
+        "posicao": 0
+      }
+    ]
+  },
+  {
+    "tipo": "IAxIA",
+    "tabuleiroFinal": [],
+    "resultado": null,
+    "data": "2025-09-11T18:22:57.277Z",
+    "acoes": [
+      {
+        "jogador": "X",
+        "posicao": 0
+      }
+    ]
+  },
+  {
+    "tipo": "IAxIA",
+    "tabuleiroFinal": [],
+    "resultado": null,
+    "data": "2025-09-11T18:22:58.022Z",
+    "acoes": [
+      {
+        "jogador": "X",
+        "posicao": 0
+      }
+    ]
+  },
+  {
+    "tipo": "IAxIA",
+    "tabuleiroFinal": [],
+    "resultado": null,
+    "data": "2025-09-11T18:22:58.838Z",
+    "acoes": [
+      {
+        "jogador": "X",
+        "posicao": 0
+      }
+    ]
+  },
+  {
+    "tipo": "IAxIA",
+    "tabuleiroFinal": [],
+    "resultado": null,
+    "data": "2025-09-11T18:22:59.983Z",
+    "acoes": [
+      {
+        "jogador": "X",
+        "posicao": 0
+      }
+    ]
+  },
+  {
+    "tipo": "IAxIA",
+    "tabuleiroFinal": [],
+    "resultado": null,
+    "data": "2025-09-11T18:23:01.158Z",
+    "acoes": [
+      {
+        "jogador": "X",
+        "posicao": 0
+      }
+    ]
+  },
+  {
+    "tipo": "IAxIA",
+    "tabuleiroFinal": [],
+    "resultado": null,
+    "data": "2025-09-11T18:23:02.119Z",
+    "acoes": [
+      {
+        "jogador": "X",
+        "posicao": 0
+      }
+    ]
+  },
+  {
+    "tipo": "IAxIA",
+    "tabuleiroFinal": [],
+    "resultado": null,
+    "data": "2025-09-11T18:23:03.184Z",
+    "acoes": [
+      {
+        "jogador": "X",
+        "posicao": 0
+      }
+    ]
+  },
+  {
+    "tipo": "IAxIA",
+    "tabuleiroFinal": [],
+    "resultado": null,
+    "data": "2025-09-11T18:24:21.138Z",
+    "acoes": [
+      {
+        "jogador": "X",
+        "posicao": 0
+      }
+    ]
+  },
+  {
+    "tipo": "IAxIA",
+    "tabuleiroFinal": [],
+    "resultado": null,
+    "data": "2025-09-11T18:25:49.527Z",
+    "acoes": [
+      {
+        "jogador": "X",
+        "posicao": 0
+      }
+    ]
+  },
+  {
+    "tipo": "IAxIA",
+    "tabuleiroFinal": [],
+    "resultado": null,
+    "data": "2025-09-11T18:29:16.796Z",
+    "acoes": [
+      {
+        "jogador": "X",
+        "posicao": 0
+      }
+    ]
+  },
+  {
+    "tipo": "IAxIA",
+    "tabuleiroFinal": [],
+    "resultado": null,
+    "data": "2025-09-11T18:32:37.580Z",
+    "acoes": [
+      {
+        "jogador": "X",
+        "posicao": 0
+      }
+    ]
+  },
+  {
+    "tipo": "IAxIA",
+    "tabuleiroFinal": [],
+    "resultado": null,
+    "data": "2025-09-11T18:34:11.066Z",
+    "acoes": [
+      {
+        "jogador": "X",
+        "posicao": 0
+      }
+    ]
+  }
+]
