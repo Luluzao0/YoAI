@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Velha - IA vs Humano</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Carrega a biblioteca de IA -->
+    <script src="tic_tac_toe.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            margin: 1rem;
+        }
+
+        h1 {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 15px;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .player-symbol {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .symbol-x {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+        }
+
+        .symbol-o {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 8px;
+            justify-content: center;
+            margin: 2rem 0;
+            background: #e0e0e0;
+            padding: 8px;
+            border-radius: 15px;
+        }
+
+        .cell {
+            background: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .cell:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .cell:disabled {
+            cursor: not-allowed;
+        }
+
+        .cell.x {
+            color: #ff6b6b;
+            background: linear-gradient(135deg, #ffeded, #ffe0e0);
+        }
+
+        .cell.o {
+            color: #4ecdc4;
+            background: linear-gradient(135deg, #e8f9f8, #d4f4f1);
+        }
+
+        .status {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .status.thinking {
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            color: #2d3436;
+        }
+
+        .status.player-turn {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+        }
+
+        .status.game-over {
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+            color: white;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .score-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .score-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 15px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .score-item.winner {
+            border-color: #ffd700;
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+        }
+
+        .score-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .score-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        @media (max-width: 600px) {
+            .game-container {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .game-board {
+                grid-template-columns: repeat(3, 80px);
+                grid-template-rows: repeat(3, 80px);
+            }
+
+            .cell {
+                font-size: 1.5rem;
+            }
+
+            .game-info {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>🎮 Jogo da Velha</h1>
+        <p class="subtitle">Desafie a IA com algoritmo Minimax!</p>
+        
+        <div class="game-info">
+            <div class="player-info">
+                <div class="player-symbol symbol-x">X</div>
+                <span>Você</span>
+            </div>
+            <div class="player-info">
+                <div class="player-symbol symbol-o">O</div>
+                <span>IA</span>
+            </div>
+        </div>
+
+        <div id="status" class="status player-turn">
+            Sua vez! Clique em uma casa vazia.
+        </div>
+
+        <div class="game-board" id="gameBoard">
+            <!-- Células serão criadas pelo JavaScript -->
+        </div>
+
+        <div class="score-board">
+            <div class="score-item">
+                <div class="score-number" id="playerScore">0</div>
+                <div class="score-label">Você</div>
+            </div>
+            <div class="score-item">
+                <div class="score-number" id="tieScore">0</div>
+                <div class="score-label">Empates</div>
+            </div>
+            <div class="score-item">
+                <div class="score-number" id="aiScore">0</div>
+                <div class="score-label">IA</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button onclick="reiniciarJogo()">🔄 Novo Jogo</button>
+            <button onclick="zerarPlacar()">📊 Zerar Placar</button>
+            <a href="painel.html" style="text-decoration: none;">
+                <button>📈 Ver Histórico</button>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Estado do jogo usando a biblioteca JogoDaVelhaIA
+        let tabuleiro = JogoDaVelhaIA.novoJogo();
+        let jogadorAtual = 'X'; // X = humano, O = IA
+        let jogoAtivo = true;
+        let pontuacao = {
+            jogador: 0,
+            ia: 0,
+            empates: 0
+        };
+
+        // Carrega pontuação do localStorage
+        if (localStorage.getItem('jogoDaVelhaPontuacao')) {
+            pontuacao = JSON.parse(localStorage.getItem('jogoDaVelhaPontuacao'));
+            atualizarPlacar();
+        }
+
+        // Cria o tabuleiro visual
+        function criarTabuleiro() {
+            const board = document.getElementById('gameBoard');
+            board.innerHTML = '';
+            
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('button');
+                cell.className = 'cell';
+                cell.onclick = () => fazerJogada(i);
+                cell.id = `cell-${i}`;
+                board.appendChild(cell);
+            }
+        }
+
+        // Atualiza o visual do tabuleiro
+        function atualizarTabuleiro() {
+            for (let i = 0; i < 9; i++) {
+                const cell = document.getElementById(`cell-${i}`);
+                const valor = tabuleiro[i];
+                
+                if (valor) {
+                    cell.textContent = valor;
+                    cell.className = `cell ${valor.toLowerCase()}`;
+                    cell.disabled = true;
+                } else {
+                    cell.textContent = '';
+                    cell.className = 'cell';
+                    // Só desabilita se o jogo não estiver ativo
+                    cell.disabled = !jogoAtivo;
+                }
+            }
+        }
+
+        // Atualiza o status do jogo
+        function atualizarStatus(mensagem, classe = 'player-turn') {
+            const status = document.getElementById('status');
+            status.textContent = mensagem;
+            status.className = `status ${classe}`;
+        }
+
+        // Faz uma jogada
+        async function fazerJogada(posicao) {
+            // Verifica se é a vez do jogador humano e se a posição é válida
+            if (!jogoAtivo || tabuleiro[posicao] !== null || jogadorAtual !== 'X') {
+                return;
+            }
+            
+            // Jogada do humano usando a biblioteca
+            tabuleiro = JogoDaVelhaIA.fazerJogada(tabuleiro, posicao, 'X');
+            if (!tabuleiro) return; // Jogada inválida
+            
+            jogadorAtual = 'O'; // Muda para a IA
+            atualizarTabuleiro();
+            
+            // Verifica se o jogo terminou após a jogada do humano
+            if (JogoDaVelhaIA.acabou(tabuleiro)) {
+                finalizarJogo();
+                return;
+            }
+            
+            // Vez da IA - mostra status e desabilita temporariamente o tabuleiro
+            atualizarStatus('🤖 IA está pensando...', 'thinking');
+            
+            // Desabilita temporariamente todas as células vazias durante o "pensamento"
+            for (let i = 0; i < 9; i++) {
+                const cell = document.getElementById(`cell-${i}`);
+                if (tabuleiro[i] === null) {
+                    cell.disabled = true;
+                }
+            }
+            
+            // Simula tempo de "pensamento" da IA
+            setTimeout(() => {
+                if (!jogoAtivo) return; // Verifica se o jogo ainda está ativo
+                
+                // IA faz sua jogada usando a biblioteca
+                const jogadaIA = JogoDaVelhaIA.jogadaIA(tabuleiro, 'O');
+                tabuleiro = JogoDaVelhaIA.fazerJogada(tabuleiro, jogadaIA.posicao, 'O');
+                
+                jogadorAtual = 'X'; // Volta para o jogador humano
+                atualizarTabuleiro();
+                
+                if (JogoDaVelhaIA.acabou(tabuleiro)) {
+                    finalizarJogo();
+                } else {
+                    atualizarStatus('Sua vez! Clique em uma casa vazia.', 'player-turn');
+                }
+            }, 1000);
+        }
+
+        // Finaliza o jogo
+        function finalizarJogo() {
+            jogoAtivo = false;
+            const resultado = JogoDaVelhaIA.resultadoFinal(tabuleiro);
+            
+            let mensagem, classe = 'game-over';
+            
+            if (resultado === 'X') {
+                mensagem = '🎉 Parabéns! Você venceu!';
+                pontuacao.jogador++;
+                document.querySelector('.score-board .score-item:first-child').classList.add('winner');
+            } else if (resultado === 'O') {
+                mensagem = '🤖 A IA venceu! Tente novamente.';
+                pontuacao.ia++;
+                document.querySelector('.score-board .score-item:last-child').classList.add('winner');
+            } else {
+                mensagem = '🤝 Empate! Boa partida!';
+                pontuacao.empates++;
+                document.querySelector('.score-board .score-item:nth-child(2)').classList.add('winner');
+            }
+            
+            atualizarStatus(mensagem, classe);
+            atualizarPlacar();
+            salvarPontuacao();
+            
+            // Remove destaque após alguns segundos
+            setTimeout(() => {
+                document.querySelectorAll('.score-item').forEach(item => {
+                    item.classList.remove('winner');
+                });
+            }, 3000);
+        }
+
+        // Atualiza o placar visual
+        function atualizarPlacar() {
+            document.getElementById('playerScore').textContent = pontuacao.jogador;
+            document.getElementById('aiScore').textContent = pontuacao.ia;
+            document.getElementById('tieScore').textContent = pontuacao.empates;
+        }
+
+        // Salva pontuação no localStorage
+        function salvarPontuacao() {
+            localStorage.setItem('jogoDaVelhaPontuacao', JSON.stringify(pontuacao));
+        }
+
+        // Reinicia o jogo
+        function reiniciarJogo() {
+            tabuleiro = JogoDaVelhaIA.novoJogo();
+            jogadorAtual = 'X';
+            jogoAtivo = true;
+            atualizarTabuleiro();
+            atualizarStatus('Sua vez! Clique em uma casa vazia.', 'player-turn');
+            
+            // Remove destaques
+            document.querySelectorAll('.score-item').forEach(item => {
+                item.classList.remove('winner');
+            });
+        }
+
+        // Zera o placar
+        function zerarPlacar() {
+            if (confirm('Tem certeza que deseja zerar o placar?')) {
+                pontuacao = { jogador: 0, ia: 0, empates: 0 };
+                atualizarPlacar();
+                salvarPontuacao();
+            }
+        }
+
+        // Inicializa o jogo
+        document.addEventListener('DOMContentLoaded', () => {
+            criarTabuleiro();
+            atualizarTabuleiro();
+            atualizarPlacar();
+        });
+    </script>
+</body>
+</html>
