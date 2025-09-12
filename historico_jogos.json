@@ -17,219 +17,57 @@
     "acoes": null
   },
   {
-    "tipo": "IAxIA",
-    "tabuleiroFinal": [],
-    "resultado": null,
-    "data": "2025-09-11T18:22:49.420Z",
-    "acoes": [
-      {
-        "jogador": "X",
-        "posicao": 0
-      }
-    ]
+    "tipo": "IAxHumano",
+    "tabuleiroFinal": [
+      "X",
+      "O",
+      "X",
+      "O",
+      "O",
+      "X",
+      "X",
+      "X",
+      "O"
+    ],
+    "resultado": "Empate",
+    "data": "2025-09-12T17:31:56.008Z",
+    "acoes": null,
+    "id": "1757698316006999srzmax"
   },
   {
-    "tipo": "IAxIA",
-    "tabuleiroFinal": [],
-    "resultado": null,
-    "data": "2025-09-11T18:22:52.564Z",
-    "acoes": [
-      {
-        "jogador": "X",
-        "posicao": 0
-      }
-    ]
+    "tipo": "IAxHumano",
+    "tabuleiroFinal": [
+      "X",
+      "O",
+      "X",
+      "X",
+      "O",
+      "O",
+      "O",
+      "X",
+      "X"
+    ],
+    "resultado": "Empate",
+    "data": "2025-09-12T17:32:06.353Z",
+    "acoes": null,
+    "id": "1757698326350l7i47uc3t"
   },
   {
-    "tipo": "IAxIA",
-    "tabuleiroFinal": [],
-    "resultado": null,
-    "data": "2025-09-11T18:22:53.687Z",
-    "acoes": [
-      {
-        "jogador": "X",
-        "posicao": 0
-      }
-    ]
-  },
-  {
-    "tipo": "IAxIA",
-    "tabuleiroFinal": [],
-    "resultado": null,
-    "data": "2025-09-11T18:22:54.661Z",
-    "acoes": [
-      {
-        "jogador": "X",
-        "posicao": 0
-      }
-    ]
-  },
-  {
-    "tipo": "IAxIA",
-    "tabuleiroFinal": [],
-    "resultado": null,
-    "data": "2025-09-11T18:22:55.620Z",
-    "acoes": [
-      {
-        "jogador": "X",
-        "posicao": 0
-      }
-    ]
-  },
-  {
-    "tipo": "IAxIA",
-    "tabuleiroFinal": [],
-    "resultado": null,
-    "data": "2025-09-11T18:22:56.450Z",
-    "acoes": [
-      {
-        "jogador": "X",
-        "posicao": 0
-      }
-    ]
-  },
-  {
-    "tipo": "IAxIA",
-    "tabuleiroFinal": [],
-    "resultado": null,
-    "data": "2025-09-11T18:22:57.277Z",
-    "acoes": [
-      {
-        "jogador": "X",
-        "posicao": 0
-      }
-    ]
-  },
-  {
-    "tipo": "IAxIA",
-    "tabuleiroFinal": [],
-    "resultado": null,
-    "data": "2025-09-11T18:22:58.022Z",
-    "acoes": [
-      {
-        "jogador": "X",
-        "posicao": 0
-      }
-    ]
-  },
-  {
-    "tipo": "IAxIA",
-    "tabuleiroFinal": [],
-    "resultado": null,
-    "data": "2025-09-11T18:22:58.838Z",
-    "acoes": [
-      {
-        "jogador": "X",
-        "posicao": 0
-      }
-    ]
-  },
-  {
-    "tipo": "IAxIA",
-    "tabuleiroFinal": [],
-    "resultado": null,
-    "data": "2025-09-11T18:22:59.983Z",
-    "acoes": [
-      {
-        "jogador": "X",
-        "posicao": 0
-      }
-    ]
-  },
-  {
-    "tipo": "IAxIA",
-    "tabuleiroFinal": [],
-    "resultado": null,
-    "data": "2025-09-11T18:23:01.158Z",
-    "acoes": [
-      {
-        "jogador": "X",
-        "posicao": 0
-      }
-    ]
-  },
-  {
-    "tipo": "IAxIA",
-    "tabuleiroFinal": [],
-    "resultado": null,
-    "data": "2025-09-11T18:23:02.119Z",
-    "acoes": [
-      {
-        "jogador": "X",
-        "posicao": 0
-      }
-    ]
-  },
-  {
-    "tipo": "IAxIA",
-    "tabuleiroFinal": [],
-    "resultado": null,
-    "data": "2025-09-11T18:23:03.184Z",
-    "acoes": [
-      {
-        "jogador": "X",
-        "posicao": 0
-      }
-    ]
-  },
-  {
-    "tipo": "IAxIA",
-    "tabuleiroFinal": [],
-    "resultado": null,
-    "data": "2025-09-11T18:24:21.138Z",
-    "acoes": [
-      {
-        "jogador": "X",
-        "posicao": 0
-      }
-    ]
-  },
-  {
-    "tipo": "IAxIA",
-    "tabuleiroFinal": [],
-    "resultado": null,
-    "data": "2025-09-11T18:25:49.527Z",
-    "acoes": [
-      {
-        "jogador": "X",
-        "posicao": 0
-      }
-    ]
-  },
-  {
-    "tipo": "IAxIA",
-    "tabuleiroFinal": [],
-    "resultado": null,
-    "data": "2025-09-11T18:29:16.796Z",
-    "acoes": [
-      {
-        "jogador": "X",
-        "posicao": 0
-      }
-    ]
-  },
-  {
-    "tipo": "IAxIA",
-    "tabuleiroFinal": [],
-    "resultado": null,
-    "data": "2025-09-11T18:32:37.580Z",
-    "acoes": [
-      {
-        "jogador": "X",
-        "posicao": 0
-      }
-    ]
-  },
-  {
-    "tipo": "IAxIA",
-    "tabuleiroFinal": [],
-    "resultado": null,
-    "data": "2025-09-11T18:34:11.066Z",
-    "acoes": [
-      {
-        "jogador": "X",
-        "posicao": 0
-      }
-    ]
+    "tipo": "IAxHumano",
+    "tabuleiroFinal": [
+      "X",
+      "O",
+      "X",
+      "O",
+      "O",
+      "X",
+      "X",
+      "X",
+      "O"
+    ],
+    "resultado": "Empate",
+    "data": "2025-09-12T17:33:57.027Z",
+    "acoes": null,
+    "id": "17576984370215zecnhi7u"
   }
 ]
