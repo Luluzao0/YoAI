@@ -14,12 +14,12 @@ class No {
 
 // Função para verificar se há um vencedor no tabuleiro
 function vencedor(tabuleiro) {
+    if (!Array.isArray(tabuleiro) || tabuleiro.length !== 9) return null;
     const combinacoesVitoria = [
         [0, 1, 2], [3, 4, 5], [6, 7, 8], // Linhas
         [0, 3, 6], [1, 4, 7], [2, 5, 8], // Colunas
         [0, 4, 8], [2, 4, 6]             // Diagonais
     ];
-    
     for (const [a, b, c] of combinacoesVitoria) {
         if (tabuleiro[a] && tabuleiro[a] === tabuleiro[b] && tabuleiro[a] === tabuleiro[c]) {
             return tabuleiro[a]; // Retorna 'X' ou 'O'
@@ -30,11 +30,26 @@ function vencedor(tabuleiro) {
 
 // Função para verificar se o jogo acabou (vitória ou empate)
 function acabou(tabuleiro) {
+    if (!Array.isArray(tabuleiro)) {
+        // Tenta converter para array se for string ou objeto
+        if (typeof tabuleiro === 'string') {
+            try {
+                tabuleiro = JSON.parse(tabuleiro);
+            } catch {
+                return false;
+            }
+        } else if (typeof tabuleiro === 'object' && tabuleiro !== null) {
+            tabuleiro = Object.values(tabuleiro);
+        } else {
+            return false;
+        }
+    }
     return vencedor(tabuleiro) !== null || tabuleiro.every(casa => casa !== null);
 }
 
 // Função para determinar o resultado final do jogo
 function resultadoFinal(tabuleiro) {
+    if (!Array.isArray(tabuleiro) || tabuleiro.length !== 9) return null;
     const ganhador = vencedor(tabuleiro);
     if (ganhador) return ganhador;
     if (tabuleiro.every(casa => casa !== null)) return 'Empate';
@@ -43,6 +58,7 @@ function resultadoFinal(tabuleiro) {
 
 // Função para obter todas as jogadas válidas (posições livres)
 function jogadasValidas(tabuleiro) {
+    if (!Array.isArray(tabuleiro) || tabuleiro.length !== 9) return [];
     const jogadas = [];
     for (let i = 0; i < 9; i++) {
         if (tabuleiro[i] === null) {
@@ -143,10 +159,10 @@ function novoJogo() {
 
 // Função para fazer uma jogada no tabuleiro
 function fazerJogada(tabuleiro, posicao, jogador) {
+    if (!Array.isArray(tabuleiro) || tabuleiro.length !== 9) return null;
     if (tabuleiro[posicao] !== null || posicao < 0 || posicao > 8) {
         return null; // Jogada inválida
     }
-    
     const novoTabuleiro = [...tabuleiro];
     novoTabuleiro[posicao] = jogador;
     return novoTabuleiro;
@@ -157,16 +173,15 @@ function simularPartidaIAvsIA() {
     let tabuleiro = novoJogo();
     let jogadorAtual = 'X';
     const acoes = [];
-    
-    while (!acabou(tabuleiro)) {
-        const { posicao } = jogadaIA(tabuleiro, jogadorAtual);
-        tabuleiro = fazerJogada(tabuleiro, posicao, jogadorAtual);
-        acoes.push({ jogador: jogadorAtual, posicao: posicao });
+    while (Array.isArray(tabuleiro) && !acabou(tabuleiro)) {
+        const jogada = jogadaIA(tabuleiro, jogadorAtual);
+        if (!jogada || typeof jogada.posicao !== 'number') break;
+        tabuleiro = fazerJogada(tabuleiro, jogada.posicao, jogadorAtual);
+        acoes.push({ jogador: jogadorAtual, posicao: jogada.posicao });
         jogadorAtual = jogadorAtual === 'X' ? 'O' : 'X';
     }
-    
     return {
-        tabuleiroFinal: tabuleiro,
+        tabuleiroFinal: Array.isArray(tabuleiro) ? tabuleiro : [],
         resultado: resultadoFinal(tabuleiro),
         acoes: acoes
     };
